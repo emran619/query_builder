@@ -11,7 +11,7 @@ import '../models/column_model.dart';
 import '../models/record_model.dart';
 import '../models/table_model.dart';
 
-class FlutterOrm {
+class QueryBuilder {
   // ~
   static final Database _database = DataBaseManagment.database;
 
@@ -277,7 +277,6 @@ class FlutterOrm {
     required String secondTableName,
     required String firstColumnName,
     required String secondColumnName,
-    required String condition,
     void Function(String)? whenError,
   }) async {
     List<Map<String, Object?>> list = [];
@@ -285,7 +284,7 @@ class FlutterOrm {
       function: () async {
         list = await _database.rawQuery(
             '$rowSelect ${joinMapper[type]} ${secondTableName.withoutSpaces} $on ${firstColumnName.withoutSpaces}=${secondColumnName.withoutSpaces} ');
-        log('$rowSelect ${joinMapper[type]} $secondTableName $on $firstColumnName=$secondColumnName $where $condition');
+        log('$rowSelect ${joinMapper[type]} $secondTableName $on $firstColumnName=$secondColumnName ');
         list.forEach((element) {
           log(element.toString());
         });

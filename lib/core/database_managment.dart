@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:sqflite/sqflite.dart';
 
 class DataBaseManagment {
@@ -37,5 +36,11 @@ class DataBaseManagment {
           'Something went wrong when initializing $dbName  DataBase / error : $e');
     }
     return database;
+  }
+
+  Future<void> deleteDataBase(String dbName) async {
+    var databasesPath = await getDatabasesPath();
+    String path = '$databasesPath/$dbName';
+    await deleteDatabase(path);
   }
 }

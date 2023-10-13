@@ -26,7 +26,7 @@ TableModel collage = TableModel(
       isNotNull: true,
       isInteger: true,
     ),
-    ColumnModel(name: 'name', isText: true),
+    ColumnModel(name: 'name', isVarchar: true, varcharCharCount: 50),
     ColumnModel(name: 'address', isText: true),
   ],
 );

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'flutter_orm',
+      title: 'query_builder',
       home: HomeScreen(),
     );
   }

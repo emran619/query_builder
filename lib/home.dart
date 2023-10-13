@@ -4,7 +4,7 @@ import 'dart:developer';
 import './../core/database_managment.dart';
 import './common/dummy_data.dart';
 import './../constants.dart';
-import './../core/flutter_orm.dart';
+import 'core/query_builder.dart';
 import './../models/record_model.dart';
 import './models/column_model.dart';
 import './models/condition_model.dart';
@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Create Table',
                 onTap: () async {
-                  await FlutterOrm.createTable(
+                  await QueryBuilder.createTable(
                     table: collage,
                     whenError: (error) {
                       log('Error : $error');
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Get Table Content',
                 onTap: () async {
-                  await FlutterOrm.getTableContent(
+                  await QueryBuilder.getTableContent(
                     tableName: collage.name,
                     whenError: (error) {
                       log('Error : $error');
@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Rename Table',
                 onTap: () async {
-                  await FlutterOrm.renameTable(
+                  await QueryBuilder.renameTable(
                     table: student,
                     newName: 'first Table',
                     whenError: (error) {
@@ -69,7 +69,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Get Table Names',
                 onTap: () async {
-                  await FlutterOrm.getTablesNames(
+                  await QueryBuilder.getTablesNames(
                     whenError: (error) {
                       log('Error : $error');
                     },
@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Drop Table',
                 onTap: () async {
-                  await FlutterOrm.dropTable(
+                  await QueryBuilder.dropTable(
                     table: student,
                     whenError: (error) {
                       log('Error : $error');
@@ -94,7 +94,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Add New Column',
                 onTap: () async {
-                  await FlutterOrm.addNewColumn(
+                  await QueryBuilder.addNewColumn(
                     table: student,
                     column: ColumnModel(
                       name: 'bio',
@@ -110,28 +110,30 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Update Column Value',
                 onTap: () async {
-                  await FlutterOrm.updateColumnValue(
-                      table: student,
-                      columnName: 'ID_adress',
-                      newColumnValue: 'hi',
-                      condition: ConditionModel(
-                        key: 'id',
-                        condition: ConditionType.equalTo,
-                        val: 5,
-                      ));
+                  await QueryBuilder.updateColumnValue(
+                    table: student,
+                    columnName: 'ID_adress',
+                    newColumnValue: 'hi',
+                    condition: ConditionModel(
+                      key: 'id',
+                      condition: ConditionType.equalTo,
+                      val: 5,
+                    ),
+                    whenError: (error) {},
+                  );
                 },
               ),
 
               ButtonsWidget(
                 title: 'Column Names In Table',
                 onTap: () async {
-                  await FlutterOrm.getColumnNames(student.name);
+                  await QueryBuilder.getColumnNames(student.name);
                 },
               ),
               ButtonsWidget(
                 title: 'Rename Column',
                 onTap: () async {
-                  await FlutterOrm.renameColumn(
+                  await QueryBuilder.renameColumn(
                     table: student,
                     oldName: 'have4324',
                     newName: 'havek',
@@ -149,7 +151,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Insert Record',
                 onTap: () async {
-                  await FlutterOrm.insertRecord(
+                  await QueryBuilder.insertRecord(
                     table: collage,
                     record: RecordModel(data: [
                       RecordItemModel(columnName: 'name', value: 'test2'),
@@ -165,7 +167,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Update Record',
                 onTap: () async {
-                  await FlutterOrm.updateRecord(
+                  await QueryBuilder.updateRecord(
                     table: student,
                     newRecord: [
                       RecordItemModel(columnName: 'name', value: 'Erhamny'),
@@ -185,7 +187,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Delete Record',
                 onTap: () async {
-                  await FlutterOrm.deleteRecord(
+                  await QueryBuilder.deleteRecord(
                     table: student,
                     condition: ConditionModel(
                         key: 'haveTV',
@@ -205,7 +207,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Union',
                 onTap: () async {
-                  await FlutterOrm.union(
+                  await QueryBuilder.union(
                     type: UnionType.union,
                     firstRowSelect: 'SELECT bio FROM ${student.name}',
                     secondRowSelect: 'SELECT bio FROM ${student.name}',
@@ -219,7 +221,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Union All',
                 onTap: () async {
-                  await FlutterOrm.union(
+                  await QueryBuilder.union(
                     type: UnionType.unionAll,
                     firstRowSelect: 'SELECT bio FROM ${student.name}',
                     secondRowSelect: 'SELECT bio FROM ${student.name}',
@@ -235,14 +237,15 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Inner Join',
                 onTap: () async {
-                  await FlutterOrm.join(
+                  JoinType.inner;
+                  JoinType.left;
+                  await QueryBuilder.join(
                     type: JoinType.inner,
                     rowSelect:
                         'SELECT ${collage.name}.address,${student.name}.name FROM ${student.name}',
                     secondTableName: collage.name,
                     firstColumnName: '${collage.name}.collageId',
                     secondColumnName: '${student.name}.collageId',
-                    condition: 'condition',
                     whenError: (error) {
                       log('Error : $error');
                     },
@@ -253,14 +256,13 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Left Join',
                 onTap: () async {
-                  await FlutterOrm.join(
+                  await QueryBuilder.join(
                     type: JoinType.left,
                     rowSelect:
                         'SELECT ${collage.name}.address,${student.name}.name FROM ${student.name}',
                     secondTableName: collage.name,
                     firstColumnName: '${collage.name}.collageId',
                     secondColumnName: '${student.name}.collageId',
-                    condition: 'condition',
                     whenError: (error) {
                       log('Error : $error');
                     },
@@ -274,7 +276,7 @@ class HomeScreen extends StatelessWidget {
               ButtonsWidget(
                 title: 'Row Query',
                 onTap: () async {
-                  await FlutterOrm.rawQuery(
+                  await QueryBuilder.rawQuery(
                     'query',
                     whenError: (error) {
                       log('Error : $error');
